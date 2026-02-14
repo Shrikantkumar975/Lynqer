@@ -135,6 +135,20 @@ app.get("/analytics/:shortId", optionalAuth, async (req, res) => {
   }
 });
 
+// API: Get All URLs for User (Protected)
+app.get("/urls", optionalAuth, async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    const urls = await URL.find({ user: req.user._id }).sort({ createdAt: -1 });
+    res.json(urls);
+  } catch (error) {
+    console.error("Error in /urls:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 // Redirect
 app.get("/:shortId", async (req, res) => {
   try {
