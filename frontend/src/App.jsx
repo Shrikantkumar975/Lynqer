@@ -14,10 +14,16 @@ import { Navbar } from "@/components/Navbar";
 function Home() {
   const [longUrl, setLongUrl] = useState("");
   const [customAlias, setCustomAlias] = useState("");
-  const [expiresAt, setExpiresAt] = useState("");
+  const [expiresAt, setExpiresAt] = useState(() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    // Adjust for local timezone to match datetime-local input requirement
+    return new Date(tomorrow.getTime() - (tomorrow.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+  });
   const [shortUrl, setShortUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
   const { token } = useAuth();
 
@@ -101,7 +107,8 @@ function Home() {
                 value={expiresAt}
                 onChange={(e) => setExpiresAt(e.target.value)}
                 disabled={!token}
-                className="h-12 rounded-xl border-zinc-200 bg-zinc-50 px-4 text-base transition-all focus:border-violet-500 focus:bg-white focus:ring-2 focus:ring-violet-500/20 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-violet-500 dark:focus:bg-zinc-950 disabled:opacity-60 disabled:cursor-not-allowed"
+                style={(theme === "dark") ? { colorScheme: "dark" } : { colorScheme: "light" }}
+                className="h-12  rounded-xl border-zinc-200 bg-zinc-50 px-4 text-base transition-all focus:border-violet-500 focus:bg-white focus:ring-2 focus:ring-violet-500/20 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-violet-500 dark:focus:bg-zinc-950 disabled:opacity-60 disabled:cursor-not-allowed"
               />
               {!token && (
                 <p className="text-xs text-zinc-500 ml-1">Guest links expire in 10 days.</p>
