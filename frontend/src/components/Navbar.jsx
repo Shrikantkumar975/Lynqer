@@ -46,7 +46,7 @@ export function Navbar() {
     const toggleTheme = () => setDarkMode(!darkMode);
 
     return (
-        <nav className="absolute top-0 left-0 right-0 flex items-center justify-between p-6 z-50">
+        <nav className="fixed top-0 left-0 right-0 flex items-center justify-between px-20 py-4 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-200 dark:bg-zinc-950/80 dark:border-zinc-800">
             {/* Logo / Navigation */}
             <div className="flex items-center gap-8">
                 <Link to="/" className="flex items-center gap-2 text-zinc-900 dark:text-zinc-50 hover:opacity-80 transition-opacity">
@@ -70,7 +70,7 @@ export function Navbar() {
                     {isDropdownOpen && (
                         <div className="absolute left-0 top-full mt-2 w-56 rounded-xl border border-zinc-200 bg-white p-2 shadow-lg shadow-zinc-200/50 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-none animate-in fade-in zoom-in-95 duration-200">
                             <Link
-                                to="/"
+                                to="/shortener"
                                 onClick={() => setIsDropdownOpen(false)}
                                 className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-600 hover:bg-zinc-100 hover:text-violet-600 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-violet-400 transition-colors"
                             >
@@ -117,9 +117,14 @@ export function Navbar() {
             <div className="flex items-center gap-4">
                 {user ? (
                     <div className="flex items-center gap-4">
-                        <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400 hidden sm:block">
-                            Hi, {user.name}
-                        </span>
+                        <Button
+                            variant="ghost"
+                            onClick={() => navigate("/profile")}
+                            className="flex items-center gap-2 text-zinc-600 hover:bg-zinc-200 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                        >
+                            <User className="h-4 w-4" />
+                            <span className="hidden sm:block">Hi, {user.name}</span>
+                        </Button>
                         <Button
                             variant="ghost"
                             size="icon"

@@ -149,6 +149,27 @@ app.get("/urls", optionalAuth, async (req, res) => {
   }
 });
 
+// API: Delete URL (Protected)
+app.delete("/urls/:id", optionalAuth, async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    const url = await URL.findById(req.params.id);
+    if (!url) {
+      return res.status(404).json({ error: "URL not found" });
+    }
+    if (url.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
+    await url.deleteOne();
+    res.json({ message: "URL deleted" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server Error" });
+  }
+});
+
 // Redirect
 app.get("/:shortId", async (req, res) => {
   try {
