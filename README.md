@@ -9,13 +9,15 @@
 -   **Password Generator**: Create secure, random passwords with customizable options.
 -   **User Accounts**: Sign up and log in to manage your links.
 -   **Authentication**: Secure JWT-based authentication.
+-   **Profile Dashboard**: View all your created links, delete them, and access detailed analytics.
+-   **Analytics**: Track total clicks and recent activity for each shortened link.
+-   **Landing Page**: A beautiful home page showcasing all features.
 -   **Dark Mode**: Fully functional light and dark mode UI.
 -   **Responsive Design**: Beautiful, mobile-first interface built with Tailwind CSS.
--   **Analytics**: Track the number of clicks for each shortened link.
 
 ## Tech Stack
 
--   **Frontend**: React (Vite), Tailwind CSS, Lucide React, Axios, React Router DOM, react-qr-code.
+-   **Frontend**: React (Vite), Tailwind CSS, Lucide React, Axios, React Router DOM, react-qr-code, Radix UI.
 -   **Backend**: Node.js, Express.js, MongoDB (Mongoose), JSON Web Token (JWT), bcryptjs.
 
 ## Prerequisites
@@ -103,6 +105,9 @@ The application will be available at `http://localhost:5173` (or the port shown 
 ### URLs
 
 -   `POST /shorten`: Create a short URL (Auth optional, but required to link to user).
+-   `GET /urls`: Get all URLs created by the authenticated user.
+-   `GET /analytics/:shortId`: Get analytics data for a specific short URL.
+-   `DELETE /urls/:id`: Delete a short URL (Requires ownership).
 -   `GET /:shortId`: Redirect to the original URL.
 
 ## Project Structure
@@ -116,10 +121,10 @@ url_shortner/
 │   └── ...
 ├── frontend/               # React Frontend
 │   ├── src/
-│   │   ├── components/     # Reusable UI components (Navbar, etc.)
+│   │   ├── components/     # Reusable UI components (Navbar, Card, etc.)
 │   │   ├── context/        # Auth Context
-│   │   ├── pages/          # Page components (Home, Auth, QrGenerator, PasswordGenerator)
-│   │   ├── App.jsx         # Main App component
+│   │   ├── pages/          # Page components (Home, UrlShortener, Auth, QrGenerator, PasswordGenerator, Profile, Analytics)
+│   │   ├── App.jsx         # Main App component with Routing
 │   │   └── ...
 │   └── ...
 └── README.md               # Project Documentation
