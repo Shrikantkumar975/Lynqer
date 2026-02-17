@@ -32,6 +32,20 @@ mongoose.connect(MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.error("❌ MongoDB Connection Error:", err));
 
+// Health Check Endpoint
+app.get("/health", (req, res) => {
+  const dbStatus = mongoose.connection.readyState; // 0: disconnected, 1: connected, 2: connecting, 3: disconnecting
+  res.status(200).json({
+    status: "ok",
+    uptime: process.uptime(),
+    dbState: dbStatus === 1 ? "Connected" : "Disconnected",
+    env: {
+      port: PORT,
+      frontend: FRONTEND_URL
+    }
+  });
+});
+
 // API: Create Short URL (Optional Auth)
 app.post("/shorten", optionalAuth, async (req, res) => {
   try {
@@ -250,8 +264,8 @@ app.post("/auth/register", async (req, res) => {
       token,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server Error" });
+    console.error("Registration Error:", error);
+    res.status(500).json({ error: error.message || "Server Error" });
   }
 });
 
