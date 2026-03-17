@@ -192,8 +192,8 @@ export default function Profile() {
                                                     <div className="space-y-4">
                                                         <h4 className="text-sm font-medium text-zinc-900 dark:text-zinc-100">Recent Activity</h4>
                                                         <div className="max-h-[200px] overflow-y-auto space-y-3 pr-2">
-                                                            {analyticsData.analytics && analyticsData.analytics.length > 0 ? (
-                                                                analyticsData.analytics.slice().reverse().map((entry, i) => (
+                                                            {analyticsData.analytics && analyticsData.analytics.recentActivity && analyticsData.analytics.recentActivity.length > 0 ? (
+                                                                analyticsData.analytics.recentActivity.map((entry, i) => (
                                                                     <div key={i} className="flex items-center justify-between text-sm">
                                                                         <span className="text-zinc-600 dark:text-zinc-400">
                                                                             {new Date(entry.timestamp).toLocaleString()}

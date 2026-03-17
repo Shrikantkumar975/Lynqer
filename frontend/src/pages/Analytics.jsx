@@ -83,7 +83,7 @@ function Analytics() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-zinc-200/50 dark:divide-zinc-800/50">
-                                {data.analytics && data.analytics.slice().reverse().map((entry, i) => (
+                                {data.analytics && data.analytics.recentActivity && data.analytics.recentActivity.map((entry, i) => (
                                     <tr key={i} className="hover:bg-white/50 dark:hover:bg-zinc-800/30 transition-colors">
                                         <td className="px-6 py-4 text-zinc-900 dark:text-zinc-100">
                                             {new Date(entry.timestamp).toLocaleString()}
@@ -96,7 +96,7 @@ function Analytics() {
                                         </td>
                                     </tr>
                                 ))}
-                                {(!data.analytics || data.analytics.length === 0) && (
+                                {(!data.analytics || !data.analytics.recentActivity || data.analytics.recentActivity.length === 0) && (
                                     <tr>
                                         <td colSpan="3" className="px-6 py-8 text-center text-zinc-500">
                                             No clicks yet.

@@ -1,7 +1,6 @@
 import express from "express";
 import {
     shortenUrl,
-    redirectUrl,
     getAnalytics,
     getUserUrls,
     deleteUrl
@@ -70,7 +69,7 @@ router.get("/analytics/:shortId", optionalAuth, getAnalytics);
 
 /**
  * @swagger
- * /urls/urls:
+ * /urls:
  *   get:
  *     summary: Get all URLs for the authenticated user
  *     tags: [URLs]
@@ -80,7 +79,7 @@ router.get("/analytics/:shortId", optionalAuth, getAnalytics);
  *       200:
  *         description: List of URLs
  */
-router.get("/urls", optionalAuth, getUserUrls);
+router.get("/", optionalAuth, getUserUrls);
 
 /**
  * @swagger
@@ -100,24 +99,7 @@ router.get("/urls", optionalAuth, getUserUrls);
  *       200:
  *         description: URL deleted
  */
-router.delete("/urls/:id", optionalAuth, deleteUrl);
+router.delete("/:id", optionalAuth, deleteUrl);
 
-/**
- * @swagger
- * /urls/{shortId}:
- *   get:
- *     summary: Redirect to the original URL
- *     tags: [URLs]
- *     parameters:
- *       - in: path
- *         name: shortId
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       302:
- *         description: Redirects to long URL
- */
-router.get("/:shortId", redirectUrl);
 
 export default router;

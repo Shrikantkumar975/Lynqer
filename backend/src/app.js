@@ -5,6 +5,7 @@ import { apiLimiter } from "./middlewares/rateLimiter.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import authRoutes from "./routes/authRoutes.js";
 import urlRoutes from "./routes/urlRoutes.js";
+import { redirectUrl } from "./controllers/urlController.js";
 
 import swaggerUi from "swagger-ui-express";
 import swaggerSpecs from "./config/swagger.js";
@@ -35,6 +36,9 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/urls", urlRoutes);
+
+// Root Redirect for Short URLs
+app.get("/:shortId", redirectUrl);
 
 // Health Check
 app.get("/health", (req, res) => {
