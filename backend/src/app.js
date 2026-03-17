@@ -11,6 +11,9 @@ import swaggerSpecs from "./config/swagger.js";
 
 const app = express();
 
+// Trust proxy for rate limiter (required for Vercel/Render)
+app.set("trust proxy", 1);
+
 // Security Middleware
 app.use(helmet());
 
