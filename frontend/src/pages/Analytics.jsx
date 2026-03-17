@@ -18,7 +18,7 @@ function Analytics() {
         const fetchAnalytics = async () => {
             try {
                 const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-                const response = await axios.get(`${import.meta.env.VITE_API_URL}/analytics/${shortId}`, config);
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/urls/analytics/${shortId}`, config);
                 setData(response.data);
             } catch (err) {
                 setError(err.response?.data?.error || "Failed to load analytics");
@@ -32,23 +32,23 @@ function Analytics() {
 
     if (loading) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-950">
-                <Loader2 className="h-8 w-8 animate-spin text-violet-600" />
+            <div className="flex min-h-screen items-center justify-center bg-transparent transition-colors duration-300">
+                <Loader2 className="h-8 w-8 animate-spin text-zinc-900 dark:text-white" />
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-50 dark:bg-zinc-950">
+            <div className="flex min-h-screen flex-col items-center justify-center bg-transparent transition-colors duration-300">
                 <p className="text-red-600">{error}</p>
-                <Link to="/" className="mt-4 text-violet-600 hover:underline">Go Home</Link>
+                <Link to="/" className="mt-4 text-zinc-900 hover:underline dark:text-white">Go Home</Link>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
+        <div className="min-h-screen bg-transparent transition-colors duration-300">
             <Navbar />
             <div className="container mx-auto px-4 py-8 mt-16">
                 <Link to="/" className="flex items-center text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 mb-6">
@@ -57,34 +57,34 @@ function Analytics() {
 
                 <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50 mb-2">Analytics</h1>
                 <p className="text-zinc-500 dark:text-zinc-400 mb-8">
-                    Stats for <span className="font-mono text-violet-600">{data.shortId}</span> &rarr; {data.longUrl}
+                    Stats for <span className="font-mono text-zinc-900 dark:text-white font-bold">{data.shortId}</span> &rarr; {data.longUrl}
                 </p>
 
                 {/* Stats Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800">
+                    <div className="bg-white/40 dark:bg-zinc-900/40 p-6 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.05)] backdrop-blur-xl border border-white/50 dark:border-zinc-800/50">
                         <h3 className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Total Clicks</h3>
                         <p className="text-4xl font-bold text-zinc-900 dark:text-zinc-50 mt-2">{data.clicks}</p>
                     </div>
                 </div>
 
                 {/* Recent Activity Table */}
-                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800 overflow-hidden">
-                    <div className="px-6 py-4 border-b border-zinc-200 dark:border-zinc-800">
+                <div className="bg-white/40 dark:bg-zinc-900/40 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.05)] backdrop-blur-xl border border-white/50 dark:border-zinc-800/50 overflow-hidden">
+                    <div className="px-6 py-4 border-b border-zinc-200/50 dark:border-zinc-800/50">
                         <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">Recent Activity</h3>
                     </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-left text-sm">
-                            <thead className="bg-zinc-50 dark:bg-zinc-950/50 text-zinc-500 dark:text-zinc-400">
+                            <thead className="bg-white/50 dark:bg-black/20 text-zinc-600 dark:text-zinc-400 border-b border-zinc-200/50 dark:border-zinc-800/50">
                                 <tr>
                                     <th className="px-6 py-3 font-medium">Time</th>
                                     <th className="px-6 py-3 font-medium">IP Address</th>
                                     <th className="px-6 py-3 font-medium">User Agent</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+                            <tbody className="divide-y divide-zinc-200/50 dark:divide-zinc-800/50">
                                 {data.analytics && data.analytics.slice().reverse().map((entry, i) => (
-                                    <tr key={i} className="hover:bg-zinc-50 dark:hover:bg-zinc-900/50">
+                                    <tr key={i} className="hover:bg-white/50 dark:hover:bg-zinc-800/30 transition-colors">
                                         <td className="px-6 py-4 text-zinc-900 dark:text-zinc-100">
                                             {new Date(entry.timestamp).toLocaleString()}
                                         </td>

@@ -33,14 +33,14 @@ export default function QrGenerator() {
     };
 
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-50 px-4 transition-colors duration-300 dark:bg-zinc-950">
+        <div className="flex min-h-screen flex-col items-center justify-center bg-transparent px-4 transition-colors duration-300">
             <Navbar />
 
             <div className="w-full max-w-md space-y-8 mt-20">
                 {/* Header */}
                 <div className="text-center">
-                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-600 shadow-lg shadow-violet-500/30 transition-transform hover:scale-105">
-                        <QrCode className="h-7 w-7 text-white" />
+                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/40 dark:bg-white/10 backdrop-blur-md border border-white/50 dark:border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.1)] text-zinc-800 dark:text-zinc-200 transition-transform hover:scale-105">
+                        <QrCode className="h-7 w-7" />
                     </div>
                     <h1 className="mt-6 text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
                         QR Code Generator
@@ -51,7 +51,7 @@ export default function QrGenerator() {
                 </div>
 
                 {/* Card */}
-                <div className="rounded-3xl bg-white p-8 shadow-xl shadow-zinc-200/50 ring-1 ring-zinc-100 transition-all dark:bg-zinc-900 dark:shadow-none dark:ring-zinc-800">
+                <div className="rounded-3xl bg-white/40 p-8 shadow-[0_8px_32px_rgba(0,0,0,0.05)] backdrop-blur-xl border border-white/50 dark:border-zinc-800/50 dark:bg-zinc-900/40 transition-all">
                     <div className="space-y-6">
                         <div className="space-y-2">
                             <Input
@@ -59,7 +59,7 @@ export default function QrGenerator() {
                                 placeholder="https://example.com or UPI ID"
                                 value={text}
                                 onChange={(e) => setText(e.target.value)}
-                                className="h-12 rounded-xl border-zinc-200 bg-zinc-50 px-4 text-base transition-all focus:border-violet-500 focus:bg-white focus:ring-2 focus:ring-violet-500/20 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder:text-zinc-600 dark:focus:border-violet-500 dark:focus:bg-zinc-950"
+                                className="h-12 rounded-xl bg-white/50 dark:bg-black/20 border-white/40 dark:border-zinc-800/50 focus:border-zinc-500 focus:bg-white/80 dark:focus:bg-black/40 px-4 text-base transition-all dark:text-zinc-100 dark:placeholder:text-zinc-500"
                             />
                         </div>
 
@@ -83,7 +83,7 @@ export default function QrGenerator() {
                         <Button
                             onClick={handleDownload}
                             disabled={!text}
-                            className="h-12 w-full rounded-xl bg-violet-600 text-base font-semibold text-white shadow-lg shadow-violet-500/25 transition-all hover:bg-violet-700 hover:shadow-violet-500/40 disabled:opacity-70 dark:bg-violet-600 dark:hover:bg-violet-500"
+                            className="h-12 w-full rounded-xl bg-zinc-900 text-base font-semibold text-white shadow-md transition-all hover:bg-zinc-800 disabled:opacity-70 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
                         >
                             <Download className="mr-2 h-5 w-5" />
                             Download QR Code

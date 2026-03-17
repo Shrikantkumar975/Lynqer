@@ -22,7 +22,7 @@ export default function Profile() {
     const fetchUrls = async () => {
         try {
             const config = { headers: { Authorization: `Bearer ${token}` } };
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}/urls`, config);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/urls`, config);
             setUrls(response.data);
         } catch (err) {
             setError("Failed to fetch URLs");
@@ -36,7 +36,7 @@ export default function Profile() {
         setAnalyticsLoading(true);
         try {
             const config = { headers: { Authorization: `Bearer ${token}` } };
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}/analytics/${shortId}`, config);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/urls/analytics/${shortId}`, config);
             setAnalyticsData(response.data);
         } catch (err) {
             console.error(err);
@@ -62,7 +62,7 @@ export default function Profile() {
 
         try {
             const config = { headers: { Authorization: `Bearer ${token}` } };
-            await axios.delete(`${import.meta.env.VITE_API_URL}/urls/${id}`, config);
+            await axios.delete(`${import.meta.env.VITE_API_URL}/api/urls/${id}`, config);
             setUrls(urls.filter((url) => url._id !== id));
         } catch (err) {
             console.error("Failed to delete URL", err);
@@ -72,14 +72,14 @@ export default function Profile() {
 
     if (loading) {
         return (
-            <div className="flex h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-950">
-                <div className="h-8 w-8 animate-spin rounded-full border-4 border-violet-600 border-t-transparent"></div>
+            <div className="flex h-screen items-center justify-center bg-transparent transition-colors duration-300">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-900 dark:border-white border-t-transparent dark:border-t-transparent"></div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 transition-colors duration-300">
+        <div className="min-h-screen bg-transparent transition-colors duration-300">
             <Navbar />
             <div className="container mx-auto max-w-5xl px-8 py-8 pt-24">
 
@@ -91,7 +91,7 @@ export default function Profile() {
                             Manage your links and view their performance
                         </p>
                     </div>
-                    <div className="rounded-xl bg-violet-100 px-4 py-2 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
+                    <div className="rounded-xl bg-white/40 px-4 py-2 text-zinc-900 dark:bg-white/10 dark:text-zinc-100 backdrop-blur-md border border-white/50 dark:border-white/20 shadow-[0_2px_10px_rgba(0,0,0,0.05)]">
                         <span className="font-semibold">{urls.length}</span> Links Created
                     </div>
                 </div>
@@ -101,7 +101,7 @@ export default function Profile() {
                     {urls.map((url) => (
                         <div
                             key={url._id}
-                            className="group relative flex flex-col justify-between rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-200 transition-all hover:shadow-md dark:bg-zinc-900 dark:ring-zinc-800"
+                            className="group relative flex flex-col justify-between rounded-2xl bg-white/40 p-5 shadow-[0_8px_32px_rgba(0,0,0,0.05)] backdrop-blur-xl border border-white/50 dark:border-zinc-800/50 dark:bg-zinc-900/40 hover:-translate-y-1 transition-all duration-300"
                         >
                             <div>
                                 <div className="flex items-start justify-between">
@@ -111,7 +111,7 @@ export default function Profile() {
                                             href={`${import.meta.env.VITE_API_URL}/${url.shortId}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="text-lg font-semibold text-violet-600 hover:underline dark:text-violet-400"
+                                            className="text-lg font-semibold text-zinc-900 hover:underline dark:text-zinc-100"
                                         >
                                             /{url.shortId}
                                         </a>
@@ -174,16 +174,16 @@ export default function Profile() {
                                             </DialogHeader>
                                             {analyticsLoading ? (
                                                 <div className="flex justify-center p-8">
-                                                    <div className="h-6 w-6 animate-spin rounded-full border-2 border-violet-600 border-t-transparent" />
+                                                    <div className="h-6 w-6 animate-spin rounded-full border-2 border-zinc-900 dark:border-white border-t-transparent dark:border-t-transparent" />
                                                 </div>
                                             ) : analyticsData ? (
                                                 <div className="space-y-6">
-                                                    <div className="rounded-xl bg-violet-50 p-4 dark:bg-violet-900/10">
+                                                    <div className="rounded-xl bg-zinc-100/50 p-4 dark:bg-zinc-800/50 backdrop-blur-md border border-zinc-200/50 dark:border-zinc-700/50">
                                                         <div className="flex items-baseline gap-2">
-                                                            <span className="text-3xl font-bold text-violet-700 dark:text-violet-400">
+                                                            <span className="text-3xl font-bold text-zinc-900 dark:text-white">
                                                                 {analyticsData.clicks}
                                                             </span>
-                                                            <span className="text-sm text-violet-600/80 dark:text-violet-400/80">
+                                                            <span className="text-sm text-zinc-600 dark:text-zinc-400">
                                                                 Total Clicks
                                                             </span>
                                                         </div>

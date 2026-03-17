@@ -50,10 +50,10 @@ export function Navbar() {
             {/* Logo / Navigation */}
             <div className="flex items-center gap-8">
                 <Link to="/" className="flex items-center gap-2 text-zinc-900 dark:text-zinc-50 hover:opacity-80 transition-opacity">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-600 text-white">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/40 dark:border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.1)] text-zinc-900 dark:text-white">
                         <LinkIcon className="h-5 w-5" />
                     </div>
-                    <span className="font-bold text-lg hidden sm:block">EssentialKit</span>
+                    <span className="font-bold text-lg hidden sm:block">Lynqer</span>
                 </Link>
 
                 {/* Dropdown Menu */}
@@ -72,9 +72,9 @@ export function Navbar() {
                             <Link
                                 to="/shortener"
                                 onClick={() => setIsDropdownOpen(false)}
-                                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-600 hover:bg-zinc-100 hover:text-violet-600 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-violet-400 transition-colors"
+                                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-600 hover:bg-white/40 hover:backdrop-blur-md hover:shadow-sm dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:backdrop-blur-md transition-all"
                             >
-                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-100 text-violet-600 dark:bg-violet-900/30 dark:text-violet-400">
+                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/40 dark:bg-white/10 backdrop-blur-md border border-white/50 dark:border-white/20 shadow-[0_2px_10px_rgba(0,0,0,0.05)] text-zinc-700 dark:text-zinc-300">
                                     <LinkIcon className="h-4 w-4" />
                                 </div>
                                 <div>
@@ -85,9 +85,9 @@ export function Navbar() {
                             <Link
                                 to="/qr"
                                 onClick={() => setIsDropdownOpen(false)}
-                                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-600 hover:bg-zinc-100 hover:text-violet-600 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-violet-400 transition-colors"
+                                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-600 hover:bg-white/40 hover:backdrop-blur-md hover:shadow-sm dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:backdrop-blur-md transition-all"
                             >
-                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100/50 dark:bg-emerald-900/20 backdrop-blur-md border border-emerald-200/50 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400 shadow-[0_2px_10px_rgba(0,0,0,0.05)]">
                                     <QrCode className="h-4 w-4" />
                                 </div>
                                 <div>
@@ -98,9 +98,9 @@ export function Navbar() {
                             <Link
                                 to="/password"
                                 onClick={() => setIsDropdownOpen(false)}
-                                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-600 hover:bg-zinc-100 hover:text-violet-600 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-violet-400 transition-colors"
+                                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-zinc-600 hover:bg-white/40 hover:backdrop-blur-md hover:shadow-sm dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:backdrop-blur-md transition-all"
                             >
-                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400">
+                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-100/50 dark:bg-orange-900/20 backdrop-blur-md border border-orange-200/50 dark:border-orange-800/30 text-orange-700 dark:text-orange-400 shadow-[0_2px_10px_rgba(0,0,0,0.05)]">
                                     <KeyRound className="h-4 w-4" />
                                 </div>
                                 <div>

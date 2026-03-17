@@ -18,11 +18,12 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
     }, [token]);
 
-    const login = async (email, password) => {
+    const login = async (email, password, captchaToken = null) => {
         try {
-            const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, {
+            const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
                 email,
                 password,
+                ...(captchaToken && { captchaToken })
             });
             localStorage.setItem("token", data.token);
             localStorage.setItem("user", JSON.stringify(data));
@@ -32,14 +33,15 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             return {
                 success: false,
-                error: error.response?.data?.error || "Login failed",
+                error: error.response?.data?.message || error.response?.data?.error || "Login failed",
+                captchaRequired: error.response?.data?.captchaRequired || false
             };
         }
     };
 
     const register = async (name, email, password) => {
         try {
-            const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/auth/register`, {
+            const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
                 name,
                 email,
                 password,

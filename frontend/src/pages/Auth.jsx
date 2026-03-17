@@ -12,6 +12,8 @@ const Auth = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [captchaRequired, setCaptchaRequired] = useState(false);
+    const [captchaToken, setCaptchaToken] = useState("");
 
     const { login, register } = useAuth();
     const navigate = useNavigate();
@@ -23,7 +25,7 @@ const Auth = () => {
 
         let result;
         if (isLogin) {
-            result = await login(email, password);
+            result = await login(email, password, captchaToken);
         } else {
             result = await register(name, email, password);
         }
@@ -34,12 +36,15 @@ const Auth = () => {
             navigate("/");
         } else {
             setError(result.error);
+            if (result.captchaRequired) {
+                setCaptchaRequired(true);
+            }
         }
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-zinc-50 px-4 dark:bg-zinc-950">
-            <div className="w-full max-w-md space-y-8 rounded-3xl bg-white p-8 shadow-xl shadow-zinc-200/50 ring-1 ring-zinc-100 dark:bg-zinc-900 dark:shadow-none dark:ring-zinc-800">
+        <div className="flex min-h-screen items-center justify-center bg-transparent px-4 transition-colors duration-300">
+            <div className="w-full max-w-md space-y-8 rounded-3xl bg-white/40 p-8 shadow-[0_8px_32px_rgba(0,0,0,0.05)] backdrop-blur-xl border border-white/50 dark:border-zinc-800/50 dark:bg-zinc-900/40">
                 <div className="text-center">
                     <h2 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
                         {isLogin ? "Welcome back" : "Create an account"}
@@ -60,7 +65,7 @@ const Auth = () => {
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 required
-                                className="h-12 rounded-xl bg-zinc-50 dark:bg-zinc-950"
+                                className="h-12 rounded-xl bg-white/50 dark:bg-black/20 border-white/40 dark:border-zinc-800/50 focus:border-zinc-500"
                             />
                         )}
                         <Input
@@ -69,7 +74,7 @@ const Auth = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
-                            className="h-12 rounded-xl bg-zinc-50 dark:bg-zinc-950"
+                            className="h-12 rounded-xl bg-white/50 dark:bg-black/20 border-white/40 dark:border-zinc-800/50 focus:border-zinc-500"
                         />
                         <Input
                             type="password"
@@ -77,8 +82,26 @@ const Auth = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
-                            className="h-12 rounded-xl bg-zinc-50 dark:bg-zinc-950"
+                            className="h-12 rounded-xl bg-white/50 dark:bg-black/20 border-white/40 dark:border-zinc-800/50 focus:border-zinc-500"
                         />
+                        {isLogin && captchaRequired && (
+                            <div className="space-y-2 mt-4 transition-all duration-300">
+                                <label className="text-sm font-medium text-zinc-900 dark:text-zinc-50">
+                                    Please verify you are human
+                                </label>
+                                <Input
+                                    type="text"
+                                    placeholder='Type "valid_dummy_captcha"'
+                                    value={captchaToken}
+                                    onChange={(e) => setCaptchaToken(e.target.value)}
+                                    required
+                                    className="h-12 rounded-xl bg-white/50 dark:bg-black/20 border-white/40 dark:border-zinc-800/50 focus:border-zinc-500"
+                                />
+                                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                                    This is a simulated CAPTCHA for testing.
+                                </p>
+                            </div>
+                        )}
                     </div>
 
                     {error && (
@@ -89,7 +112,7 @@ const Auth = () => {
 
                     <Button
                         type="submit"
-                        className="h-12 w-full rounded-xl bg-violet-600 text-base font-semibold text-white hover:bg-violet-700 disabled:opacity-70"
+                        className="h-12 w-full rounded-xl bg-zinc-900 text-base font-semibold text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 disabled:opacity-70 transition-all shadow-md"
                         disabled={loading}
                     >
                         {loading ? (
@@ -105,7 +128,7 @@ const Auth = () => {
                 <div className="text-center">
                     <button
                         onClick={() => setIsLogin(!isLogin)}
-                        className="text-sm font-medium text-violet-600 hover:underline dark:text-violet-400"
+                        className="text-sm font-medium text-zinc-900 hover:text-zinc-700 hover:underline dark:text-zinc-100 dark:hover:text-zinc-300"
                     >
                         {isLogin
                             ? "Don't have an account? Sign up"
