@@ -1,11 +1,15 @@
-# EssentialKit
+# Lynqer
 
-**EssentialKit** is a modern, full-stack toolkit featuring a URL shortener and QR code generator, built with the MERN stack (MongoDB, Express, React, Node.js) and Tailwind CSS.
+**Lynqer** is a modern, full-stack toolkit featuring a URL shortener and QR code generator, built with the MERN stack (MongoDB, Express, React, Node.js) and Tailwind CSS.
 
 ## Features
 
 -   **Shorten URLs**: Instantly create short links for long URLs.
 -   **QR Code Generator**: Generate and download QR codes for any text, URL, or UPI ID.
+-   **API Documentation**: Interactive API documentation available at `/api-docs` via Swagger/OpenAPI.
+-   **Advanced Caching**: Redis integration for high-performance URL redirection and analytics.
+-   **Security**: Rate limiting via `express-rate-limit` and secure HTTP headers with `helmet`.
+-   **Robust Logging**: Structured logging with `winston` for better observability.
 -   **Password Generator**: Create secure, random passwords with customizable options.
 -   **User Accounts**: Sign up and log in to manage your links.
 -   **Authentication**: Secure JWT-based authentication.
