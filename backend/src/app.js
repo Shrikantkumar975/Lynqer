@@ -18,10 +18,25 @@ app.set("trust proxy", 1);
 // Security Middleware
 app.use(helmet());
 
-// CORS
+const allowedOrigins = [
+    "http://localhost:5173",
+    "http://localhost:5000",
+    "https://essential-kit.vercel.app",
+    "https://lynqer-frontend.vercel.app",
+    process.env.FRONTEND_URL
+].filter(Boolean);
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL || "*",
-    credentials: true
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Rate Limiting (Global API)
