@@ -103,7 +103,7 @@ export default function UrlShortener() {
                                 value={expiresAt}
                                 onChange={(e) => setExpiresAt(e.target.value)}
                                 disabled={!token}
-                                style={(theme === "dark") ? { colorScheme: "dark" } : { colorScheme: "light" }}
+
                                 className="h-12 rounded-xl bg-white/50 dark:bg-black/20 border-white/40 dark:border-zinc-800/50 focus:border-zinc-500 focus:bg-white/80 dark:focus:bg-black/40 px-4 text-base transition-all dark:text-zinc-100 dark:placeholder:text-zinc-500 disabled:opacity-60 disabled:cursor-not-allowed"
                             />
                             {!token && (

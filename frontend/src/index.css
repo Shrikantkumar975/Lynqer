@@ -126,9 +126,7 @@
     cursor: pointer;
 }
 
-.dark ::-webkit-calendar-picker-indicator {
-    filter: invert(1) !important;
-}
+
 
 @layer utilities {
     .animate-blob {
