@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Copy, RefreshCw, KeyRound, Check } from "lucide-react";
+import { Copy, RefreshCw, KeyRound, Check, ShieldCheck, Loader2 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import axios from "axios";
 import { Navbar } from "@/components/Navbar";
 
 export default function PasswordGenerator() {
@@ -12,6 +14,9 @@ export default function PasswordGenerator() {
     const [includeNumbers, setIncludeNumbers] = useState(true);
     const [includeSymbols, setIncludeSymbols] = useState(true);
     const [copied, setCopied] = useState(false);
+    const [alias, setAlias] = useState("");
+    const [saving, setSaving] = useState(false);
+    const { token, user } = useAuth();
 
     const generatePassword = () => {
         let charset = "";
@@ -42,6 +47,29 @@ export default function PasswordGenerator() {
         navigator.clipboard.writeText(password);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
+    };
+
+    const handleSavePassword = async () => {
+        if (!password || !alias) {
+            alert("Please generate a password and provide an alias.");
+            return;
+        }
+
+        setSaving(true);
+        try {
+            const config = { headers: { Authorization: `Bearer ${token}` } };
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/passwords`, {
+                alias,
+                password
+            }, config);
+            alert("Password saved to vault!");
+            setAlias("");
+        } catch (err) {
+            console.error(err);
+            alert("Failed to save password");
+        } finally {
+            setSaving(false);
+        }
     };
 
     return (
@@ -148,12 +176,57 @@ export default function PasswordGenerator() {
                             </div>
                         </div>
 
-                        <Button
-                            onClick={copyToClipboard}
-                            className="h-12 w-full rounded-xl bg-zinc-900 text-base font-semibold text-white shadow-md transition-all hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
-                        >
-                            {copied ? "Copied!" : "Copy Password"}
-                        </Button>
+                        {/* Alias Input (Auth Required) */}
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300 ml-1">
+                                Description / Alias {user ? "(Required to Save)" : "(Login required to save)"}
+                            </label>
+                            <Input
+                                placeholder={user ? "e.g. My Website Account" : "Login to save passwords"}
+                                value={alias}
+                                onChange={(e) => setAlias(e.target.value)}
+                                disabled={!user}
+                                className="h-12 rounded-xl bg-white/50 dark:bg-black/20 border-white/40 dark:border-zinc-800/50 focus:border-zinc-500 focus:bg-white/80 dark:focus:bg-black/40 px-4 text-base transition-all dark:text-zinc-100 dark:placeholder:text-zinc-500 disabled:opacity-60"
+                            />
+                        </div>
+
+                        <div className="flex flex-col gap-3">
+                            <Button
+                                onClick={copyToClipboard}
+                                variant="outline"
+                                className="h-12 w-full rounded-xl border-zinc-200 dark:border-zinc-800 text-base font-semibold transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                            >
+                                {copied ? (
+                                    <>
+                                        <Check className="mr-2 h-5 w-5 text-green-500" />
+                                        Copied!
+                                    </>
+                                ) : (
+                                    <>
+                                        <Copy className="mr-2 h-5 w-5" />
+                                        Copy Password
+                                    </>
+                                )}
+                            </Button>
+
+                            <Button
+                                onClick={handleSavePassword}
+                                disabled={!user || saving || !password || !alias}
+                                className="h-12 w-full rounded-xl bg-zinc-900 text-base font-semibold text-white shadow-md transition-all hover:bg-zinc-800 disabled:opacity-70 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
+                            >
+                                {saving ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                        Saving...
+                                    </>
+                                ) : (
+                                    <>
+                                        <ShieldCheck className="mr-2 h-5 w-5" />
+                                        Save to Vault
+                                    </>
+                                )}
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>

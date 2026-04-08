@@ -3,7 +3,8 @@ import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { Copy, BarChart2, Calendar, MousePointer2, Trash2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Copy, BarChart2, Calendar, MousePointer2, Trash2, ShieldCheck, Eye, EyeOff, KeyRound, Search } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 
 export default function Profile() {
@@ -14,10 +15,53 @@ export default function Profile() {
     const [selectedUrl, setSelectedUrl] = useState(null);
     const [analyticsData, setAnalyticsData] = useState(null);
     const [analyticsLoading, setAnalyticsLoading] = useState(false);
+    const [passwords, setPasswords] = useState([]);
+    const [showPasswords, setShowPasswords] = useState({});
+    const [passwordsLoading, setPasswordsLoading] = useState(true);
+    const [passwordSearch, setPasswordSearch] = useState("");
 
     useEffect(() => {
-        fetchUrls();
+        if (token) {
+            fetchUrls();
+            fetchPasswords();
+        }
     }, [token]);
+
+    const fetchPasswords = async () => {
+        try {
+            const config = { headers: { Authorization: `Bearer ${token}` } };
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/passwords`, config);
+            setPasswords(response.data);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setPasswordsLoading(false);
+        }
+    };
+
+    const toggleReveal = (id) => {
+        setShowPasswords(prev => ({ ...prev, [id]: !prev[id] }));
+    };
+
+    const copyPassword = (password) => {
+        navigator.clipboard.writeText(password);
+        alert("Password copied!");
+    };
+
+    const deletePassword = async (id) => {
+        if (!confirm("Remove this password?")) return;
+        try {
+            const config = { headers: { Authorization: `Bearer ${token}` } };
+            await axios.delete(`${import.meta.env.VITE_API_URL}/api/passwords/${id}`, config);
+            setPasswords(passwords.filter(p => p._id !== id));
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const filteredPasswords = passwords.filter(pw => 
+        pw.alias.toLowerCase().includes(passwordSearch.toLowerCase())
+    );
 
     const fetchUrls = async () => {
         try {
@@ -229,6 +273,92 @@ export default function Profile() {
                             <p className="mt-1 text-zinc-500 dark:text-zinc-400">Create your first short link to get started</p>
                             <Button className="mt-6" onClick={() => window.location.href = '/'}>
                                 Create Link
+                            </Button>
+                        </div>
+                    )}
+                </div>
+                <div className="mt-20 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h2 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">Saved Passwords</h2>
+                        <p className="mt-1 text-zinc-500 dark:text-zinc-400">
+                            Your secure password vault
+                        </p>
+                    </div>
+
+                    <div className="relative w-full md:w-64">
+                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                        <Input
+                            placeholder="Search passwords..."
+                            value={passwordSearch}
+                            onChange={(e) => setPasswordSearch(e.target.value)}
+                            className="h-9 pl-9 rounded-xl bg-white/40 dark:bg-white/5 border-zinc-200 dark:border-zinc-800 focus:ring-1 focus:ring-zinc-400"
+                        />
+                    </div>
+                </div>
+
+                <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                    {filteredPasswords.map((pw) => (
+                        <div
+                            key={pw._id}
+                            className="group relative flex flex-col justify-between rounded-2xl bg-white/40 p-5 shadow-[0_8px_32px_rgba(0,0,0,0.05)] backdrop-blur-xl border border-white/50 dark:border-zinc-800/50 dark:bg-zinc-900/40 hover:-translate-y-1 transition-all duration-300"
+                        >
+                            <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center gap-2">
+                                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400">
+                                        <KeyRound className="h-4 w-4" />
+                                    </div>
+                                    <h3 className="font-semibold text-zinc-900 dark:text-zinc-100 truncate max-w-[120px]" title={pw.alias}>
+                                        {pw.alias}
+                                    </h3>
+                                </div>
+                                <span className="text-[10px] text-zinc-400">
+                                    {new Date(pw.createdAt).toLocaleDateString()}
+                                </span>
+                            </div>
+
+                            <div className="relative flex items-center mb-4">
+                                <div className="flex h-10 w-full items-center justify-between rounded-lg bg-zinc-100/50 dark:bg-black/20 px-3 font-mono text-xs text-zinc-600 dark:text-zinc-400">
+                                    <span className="truncate">
+                                        {showPasswords[pw._id] ? pw.password : "••••••••"}
+                                    </span>
+                                    <div className="flex items-center gap-1">
+                                        <button onClick={() => toggleReveal(pw._id)} className="p-1 hover:text-zinc-900 dark:hover:text-zinc-100">
+                                            {showPasswords[pw._id] ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                                        </button>
+                                        <button onClick={() => copyPassword(pw.password)} className="p-1 hover:text-zinc-900 dark:hover:text-zinc-100">
+                                            <Copy className="h-3.5 w-3.5" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center justify-between pt-3 border-t border-zinc-100 dark:border-zinc-800">
+                                <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => copyPassword(pw.password)}
+                                    className="h-8 px-2 text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+                                >
+                                    <Copy className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => deletePassword(pw._id)}
+                                    className="h-8 px-2 text-red-500 hover:text-red-600"
+                                >
+                                    <Trash2 className="h-4 w-4" />
+                                </Button>
+                            </div>
+                        </div>
+                    ))}
+
+                    {passwords.length === 0 && !passwordsLoading && (
+                        <div className="col-span-full py-12 text-center rounded-2xl bg-zinc-50/50 dark:bg-zinc-900/20 border border-dashed border-zinc-200 dark:border-zinc-800">
+                            <ShieldCheck className="mx-auto h-10 w-10 text-zinc-300 dark:text-zinc-700" />
+                            <p className="mt-2 text-sm text-zinc-500">No passwords saved yet</p>
+                            <Button variant="link" className="mt-1 h-auto p-0 text-xs" onClick={() => navigate("/password")}>
+                                Go to Generator
                             </Button>
                         </div>
                     )}
