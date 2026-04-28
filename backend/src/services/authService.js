@@ -50,7 +50,9 @@ export const loginUserService = async ({ email, password, captchaToken }) => {
 
     // Check if account is locked
     if (user.isLocked) {
-        throw new Error("Account is temporarily locked due to multiple failed login attempts. Please try again later.");
+        const remaining = user.getLockTimeRemaining();
+        const minutes = Math.ceil(remaining / 60);
+        throw new Error(`Account is temporarily locked. Please try again in ${minutes} minute(s).`);
     }
 
     const isMatch = await user.matchPassword(password);
@@ -63,7 +65,7 @@ export const loginUserService = async ({ email, password, captchaToken }) => {
         await user.save();
 
         const msg = user.loginAttempts >= 5
-            ? "Account is temporarily locked due to multiple failed login attempts. Please try again later."
+            ? `Account is temporarily locked. Please try again in 15 minute(s).`
             : "Invalid email or password";
 
         const error = new Error(msg);
