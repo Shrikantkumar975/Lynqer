@@ -9,10 +9,15 @@ const userSchema = new mongoose.Schema({
     lockUntil: { type: Date },
 }, { timestamps: true });
 
-// Virtual to check if account is locked
 userSchema.virtual("isLocked").get(function () {
     return !!(this.lockUntil && this.lockUntil > Date.now());
 });
+
+userSchema.methods.getLockTimeRemaining = function () {
+    if (!this.lockUntil) return 0;
+    const remaining = Math.ceil((this.lockUntil - Date.now()) / 1000); // in seconds
+    return remaining > 0 ? remaining : 0;
+};
 
 // Hash password before saving
 userSchema.pre("save", async function () {

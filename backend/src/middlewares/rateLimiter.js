@@ -16,7 +16,7 @@ export const authLimiter = rateLimit({
     max: 20, // Limit each IP to 20 login/register requests per windowMs
     message: {
         status: 429,
-        message: "Too many login attempts, please try again later.",
+        message: "Too many login attempts from this network. Please wait 15 minutes before trying again.",
     },
 });
 
