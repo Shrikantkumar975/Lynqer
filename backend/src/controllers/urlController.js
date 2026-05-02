@@ -38,8 +38,9 @@ export const redirectUrl = async (req, res, next) => {
     try {
         const { shortId } = req.params;
         const BASE_URL = process.env.BASE_URL || `http://localhost:${process.env.PORT || 5000}`;
+        const referrer = req.get('Referrer') || req.get('Referer') || 'Direct';
 
-        const result = await getUrlForRedirectService(shortId, req.ip, req.headers["user-agent"]);
+        const result = await getUrlForRedirectService(shortId, req.ip, req.headers["user-agent"], referrer);
 
         if (result && result.isCached) {
             return res.redirect(result.longUrl);
@@ -71,7 +72,7 @@ export const redirectUrl = async (req, res, next) => {
         }
 
         // Process Analytics (Set Cache, DB Update)
-        await processClickAnalyticsService(data, req.ip, req.headers["user-agent"], req.get('Referrer'));
+        await processClickAnalyticsService(data, req.ip, req.headers["user-agent"], referrer);
 
         res.redirect(data.longUrl);
     } catch (error) {

@@ -69,7 +69,7 @@ export const shortenUrlService = async ({ longUrl, customAlias, expiresAt, user 
     return { shortUrl: `${BASE_URL}/${shortId}` };
 };
 
-export const getUrlForRedirectService = async (shortId, ip, userAgentHeaders) => {
+export const getUrlForRedirectService = async (shortId, ip, userAgentHeaders, referrer = 'Direct') => {
     // 1. Check Cache
     const cachedUrl = await redis.get(`short:${shortId}`);
 
@@ -95,7 +95,7 @@ export const getUrlForRedirectService = async (shortId, ip, userAgentHeaders) =>
                         browser: browser,
                         os: os,
                         device: device,
-                        referrer: 'Direct'
+                        referrer: referrer || 'Direct'
                     });
                 }
             } catch (err) {
@@ -179,6 +179,19 @@ export const getAnalyticsService = async (shortId, userId) => {
                     { $group: { _id: "$device", count: { $sum: 1 } } },
                     { $sort: { count: -1 } }
                 ],
+                byReferrer: [
+                    { $group: { _id: "$referrer", count: { $sum: 1 } } },
+                    { $sort: { count: -1 } }
+                ],
+                clicksByDate: [
+                    { 
+                        $group: { 
+                            _id: { $dateToString: { format: "%Y-%m-%d", date: "$timestamp" } }, 
+                            count: { $sum: 1 } 
+                        } 
+                    },
+                    { $sort: { _id: 1 } }
+                ],
                 recentActivity: [
                     { $sort: { timestamp: -1 } },
                     { $limit: 5 }
@@ -195,6 +208,8 @@ export const getAnalyticsService = async (shortId, userId) => {
             byBrowser: result.byBrowser,
             byOS: result.byOS,
             byDevice: result.byDevice,
+            byReferrer: result.byReferrer,
+            clicksByDate: result.clicksByDate,
             recentActivity: result.recentActivity
         }
     };
