@@ -46,9 +46,9 @@ export function Navbar() {
     const toggleTheme = () => setDarkMode(!darkMode);
 
     return (
-        <nav className="fixed top-0 left-0 right-0 flex items-center justify-between px-20 py-4 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-200 dark:bg-zinc-950/80 dark:border-zinc-800">
+        <nav className="fixed top-0 left-0 right-0 flex items-center justify-between px-4 md:px-8 lg:px-20 py-4 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-200 dark:bg-zinc-950/80 dark:border-zinc-800">
             {/* Logo / Navigation */}
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-2 sm:gap-4 md:gap-8">
                 <Link to="/" className="flex items-center gap-2 text-zinc-900 dark:text-zinc-50 hover:opacity-80 transition-opacity">
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/40 dark:border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.1)] text-zinc-900 dark:text-white">
                         <LinkIcon className="h-5 w-5" />
@@ -114,9 +114,9 @@ export function Navbar() {
             </div>
 
             {/* Right Side Actions */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1 sm:gap-2 md:gap-4">
                 {user ? (
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-1 sm:gap-2 md:gap-4">
                         <Button
                             variant="ghost"
                             onClick={() => navigate("/profile")}

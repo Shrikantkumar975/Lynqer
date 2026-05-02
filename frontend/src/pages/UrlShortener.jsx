@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Copy, Link as LinkIcon, Loader2 } from "lucide-react";
@@ -8,7 +8,8 @@ import { useAuth } from "@/context/AuthContext";
 import { Navbar } from "@/components/Navbar";
 
 export default function UrlShortener() {
-    const [longUrl, setLongUrl] = useState("");
+    const [searchParams] = useSearchParams();
+    const [longUrl, setLongUrl] = useState(searchParams.get("url") || "");
     const [customAlias, setCustomAlias] = useState("");
     const [expiresAt, setExpiresAt] = useState(() => {
         const tomorrow = new Date();

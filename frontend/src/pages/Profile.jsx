@@ -168,12 +168,12 @@ export default function Profile() {
                                     </span>
                                 </div>
 
-                                <p className="mt-3 line-clamp-2 text-sm text-zinc-500 dark:text-zinc-400" title={url.longUrl}>
+                                <p className="mt-3 line-clamp-2 break-all text-sm text-zinc-500 dark:text-zinc-400" title={url.longUrl}>
                                     {url.longUrl}
                                 </p>
                             </div>
 
-                            <div className="mt-5 flex items-center justify-between border-t border-zinc-100 pt-4 dark:border-zinc-800">
+                            <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-zinc-100 pt-4 dark:border-zinc-800">
                                 <div className="flex items-center gap-4 text-sm font-medium text-zinc-600 dark:text-zinc-300">
                                     <div className="flex items-center gap-1.5">
                                         <MousePointer2 className="h-4 w-4" />
@@ -337,3 +337,6 @@ function LinkIcon(props) {
         </svg>
     )
 }
+
+
+// i want to improve my home page add some cta and any other essential update so anyone landed on the page can easily get to the 
