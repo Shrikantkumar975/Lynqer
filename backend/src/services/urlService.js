@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import validator from "validator";
 import * as cheerio from "cheerio";
-import useragent from "useragent";
+import { UAParser } from "ua-parser-js";
 import URL from "../models/URL.js";
 import Analytics from "../models/Analytics.js";
 import redis from "../config/redis.js";
@@ -82,14 +82,19 @@ export const getUrlForRedirectService = async (shortId, ip, userAgentHeaders) =>
                     data.clicks++;
                     await data.save();
                     
-                    const agent = useragent.parse(userAgentHeaders);
+                    const parser = new UAParser(userAgentHeaders);
+                    const result = parser.getResult();
+                    const browser = result.browser.name ? `${result.browser.name} ${result.browser.version || ''}`.trim() : 'Unknown';
+                    const os = result.os.name ? `${result.os.name} ${result.os.version || ''}`.trim() : 'Unknown';
+                    const device = result.device.type ? `${result.device.vendor || ''} ${result.device.model || ''} ${result.device.type}`.trim() : 'Desktop/Unknown';
+                    
                     await Analytics.create({
                         url: data._id,
                         ip,
                         userAgent: userAgentHeaders,
-                        browser: agent.toAgent(),
-                        os: agent.os.toString(),
-                        device: agent.device.toString(),
+                        browser: browser,
+                        os: os,
+                        device: device,
                         referrer: 'Direct'
                     });
                 }
@@ -126,14 +131,19 @@ export const processClickAnalyticsService = async (data, ip, userAgentHeaders, r
     // Fire-and-forget Advanced Analytics
     (async () => {
         try {
-            const agent = useragent.parse(userAgentHeaders);
+            const parser = new UAParser(userAgentHeaders);
+            const result = parser.getResult();
+            const browser = result.browser.name ? `${result.browser.name} ${result.browser.version || ''}`.trim() : 'Unknown';
+            const os = result.os.name ? `${result.os.name} ${result.os.version || ''}`.trim() : 'Unknown';
+            const device = result.device.type ? `${result.device.vendor || ''} ${result.device.model || ''} ${result.device.type}`.trim() : 'Desktop/Unknown';
+
             await Analytics.create({
                 url: data._id,
                 ip,
                 userAgent: userAgentHeaders,
-                browser: agent.toAgent(),
-                os: agent.os.toString(),
-                device: agent.device.toString(),
+                browser: browser,
+                os: os,
+                device: device,
                 referrer: referrer || 'Direct'
             });
         } catch (err) {
@@ -171,7 +181,7 @@ export const getAnalyticsService = async (shortId, userId) => {
                 ],
                 recentActivity: [
                     { $sort: { timestamp: -1 } },
-                    { $limit: 20 }
+                    { $limit: 5 }
                 ]
             }
         }
