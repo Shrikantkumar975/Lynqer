@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { Navbar } from "@/components/Navbar";
@@ -8,6 +9,7 @@ import { Copy, BarChart2, Calendar, MousePointer2, Trash2, ShieldCheck, Eye, Eye
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 
 export default function Profile() {
+    const navigate = useNavigate();
     const [urls, setUrls] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -198,66 +200,14 @@ export default function Profile() {
                                         <Trash2 className="h-4 w-4" />
                                     </Button>
 
-                                    <Dialog>
-                                        <DialogTrigger asChild>
-                                            <Button
-                                                size="sm"
-                                                className="h-8 bg-zinc-900 text-xs text-zinc-50 hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
-                                                onClick={() => openAnalytics(url)}
-                                            >
-                                                <BarChart2 className="mr-1.5 h-3.5 w-3.5" />
-                                                Analytics
-                                            </Button>
-                                        </DialogTrigger>
-                                        <DialogContent className="sm:max-w-md">
-                                            <DialogHeader>
-                                                <DialogTitle>Link Analytics</DialogTitle>
-                                                <DialogDescription>
-                                                    View detailed performance metrics for your short link.
-                                                </DialogDescription>
-                                            </DialogHeader>
-                                            {analyticsLoading ? (
-                                                <div className="flex justify-center p-8">
-                                                    <div className="h-6 w-6 animate-spin rounded-full border-2 border-zinc-900 dark:border-white border-t-transparent dark:border-t-transparent" />
-                                                </div>
-                                            ) : analyticsData ? (
-                                                <div className="space-y-6">
-                                                    <div className="rounded-xl bg-zinc-100/50 p-4 dark:bg-zinc-800/50 backdrop-blur-md border border-zinc-200/50 dark:border-zinc-700/50">
-                                                        <div className="flex items-baseline gap-2">
-                                                            <span className="text-3xl font-bold text-zinc-900 dark:text-white">
-                                                                {analyticsData.clicks}
-                                                            </span>
-                                                            <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                                                                Total Clicks
-                                                            </span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="space-y-4">
-                                                        <h4 className="text-sm font-medium text-zinc-900 dark:text-zinc-100">Recent Activity</h4>
-                                                        <div className="max-h-[200px] overflow-y-auto space-y-3 pr-2">
-                                                            {analyticsData.analytics && analyticsData.analytics.recentActivity && analyticsData.analytics.recentActivity.length > 0 ? (
-                                                                analyticsData.analytics.recentActivity.map((entry, i) => (
-                                                                    <div key={i} className="flex items-center justify-between text-sm">
-                                                                        <span className="text-zinc-600 dark:text-zinc-400">
-                                                                            {new Date(entry.timestamp).toLocaleString()}
-                                                                        </span>
-                                                                        {/* <span className="rounded bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-                                                                            {entry.ip || 'Unknown IP'}
-                                                                        </span> */}
-                                                                    </div>
-                                                                ))
-                                                            ) : (
-                                                                <p className="text-sm text-zinc-500">No recent activity</p>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ) : (
-                                                <p>Failed to load data</p>
-                                            )}
-                                        </DialogContent>
-                                    </Dialog>
+                                    <Button
+                                        size="sm"
+                                        className="h-8 bg-zinc-900 text-xs text-zinc-50 hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+                                        onClick={() => navigate(`/analytics/${url.shortId}`)}
+                                    >
+                                        <BarChart2 className="mr-1.5 h-3.5 w-3.5" />
+                                        Analytics
+                                    </Button>
 
                                 </div>
                             </div>

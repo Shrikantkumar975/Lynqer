@@ -51,7 +51,7 @@ function Analytics() {
         <div className="min-h-screen bg-transparent transition-colors duration-300">
             <Navbar />
             <div className="container mx-auto px-4 py-8 mt-16">
-                <Link to="/" className="flex items-center text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 mb-6">
+                <Link to="/profile" className="flex items-center text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 mb-6">
                     <ArrowLeft className="h-4 w-4 mr-2" /> Back
                 </Link>
 
@@ -79,7 +79,7 @@ function Analytics() {
                                 <tr>
                                     <th className="px-6 py-3 font-medium">Time</th>
                                     <th className="px-6 py-3 font-medium">IP Address</th>
-                                    <th className="px-6 py-3 font-medium">User Agent</th>
+                                    <th className="px-6 py-3 font-medium scroll-w-20">Browser / OS</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-zinc-200/50 dark:divide-zinc-800/50">
@@ -92,7 +92,7 @@ function Analytics() {
                                             {entry.ip || "Unknown"}
                                         </td>
                                         <td className="px-6 py-4 text-zinc-600 dark:text-zinc-400 max-w-xs truncate" title={entry.userAgent}>
-                                            {entry.userAgent || "Unknown"}
+                                            {entry.browser ? `${entry.browser} on ${entry.os}` : (entry.userAgent || "Unknown")}
                                         </td>
                                     </tr>
                                 ))}

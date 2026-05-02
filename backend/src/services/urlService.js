@@ -77,19 +77,22 @@ export const getUrlForRedirectService = async (shortId, ip, userAgentHeaders) =>
         // Fire-and-forget Analytics Update
         (async () => {
             try {
-                await URL.updateOne(
-                    { shortId },
-                    {
-                        $inc: { clicks: 1 },
-                        $push: {
-                            analytics: {
-                                timestamp: new Date(),
-                                ip,
-                                userAgent: userAgentHeaders
-                            }
-                        }
-                    }
-                );
+                const data = await URL.findOne({ shortId }).select('_id clicks');
+                if (data) {
+                    data.clicks++;
+                    await data.save();
+                    
+                    const agent = useragent.parse(userAgentHeaders);
+                    await Analytics.create({
+                        url: data._id,
+                        ip,
+                        userAgent: userAgentHeaders,
+                        browser: agent.toAgent(),
+                        os: agent.os.toString(),
+                        device: agent.device.toString(),
+                        referrer: 'Direct'
+                    });
+                }
             } catch (err) {
                 logger.error(`Analytics update failed: ${err.message}`);
             }
@@ -168,8 +171,7 @@ export const getAnalyticsService = async (shortId, userId) => {
                 ],
                 recentActivity: [
                     { $sort: { timestamp: -1 } },
-                    { $limit: 20 },
-                    { $project: { ip: 0 } }
+                    { $limit: 20 }
                 ]
             }
         }
